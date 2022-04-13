@@ -78,116 +78,128 @@ var questions = [{
 var timer;
 
 var game = {
+
   questions: questions,
   currentQuestion: 0,
   counter: countStartNumber,
-  right: 0,
-  wrong: 0,
+  correct: 0,
+  incorrect: 0,
 
   countdown: function() {
     this.counter--;
     $("#counter-number").text(this.counter);
     if (this.counter === 0) {
-      console.log("Time's Up!");
-      this.timesUp();
+      console.log("TIME UP");
+      this.timeUp();
     }
- },
+  },
 
- loadQuestion: function() {
-   timer = setInterval(this.countdown.bind(this), 1000);
+  loadQuestion: function() {
 
-   card.html("<h2>" + questions[this.currentQuestion].question + "</h2>");
+    timer = setInterval(this.countdown.bind(this), 1000);
 
-   for (var i = 0; i < questions[this.currentQuestion].answers.length; i++) {
-   card.prepend("<button class='answer-button' id='button' data-name='" + questions[this.currentQuestion].answers[i] +
-   "'>" + questions[this.currentQuestion].answers[i] + "</button>"); 
-   }
- },
+    card.html("<h2>" + questions[this.currentQuestion].question + "</h2>");
 
- followingQuestion: function() {
-   this.currentQuestion++;
-   this.counter = window.countStartNumber;
-   $("#counter-number").text(this.counter);
-   this.loadQuestion.bind(this)();
- },
+    for (var i = 0; i < questions[this.currentQuestion].answers.length; i++) {
+      card.append("<button class='answer-button' id='button' data-name='" + questions[this.currentQuestion].answers[i]
+      + "'>" + questions[this.currentQuestion].answers[i] + "</button>");
+    }
+  },
 
- timesUp: function() {
-   clearInterval(window.timer);
-   $("#counter-number").text(this.counter);
-   card.html("<h2>Time's Up!</h2>");
-   card.append("<h3>The Correct Answer is: " + questions[this.currentQuestion].correctAnswer + "</h3>");
-   card.append("<img src='" + questions[this.currentQuestion].image + "'/>");
+  nextQuestion: function() {
+    this.counter = window.countStartNumber;
+    $("#counter-number").text(this.counter);
+    this.currentQuestion++;
+    this.loadQuestion.bind(this)();
+  },
 
-   if (this.currentQuestion === questions.length - 1) {
-     setTimeout(this.results, 3 * 1000);
-   }
-   else {
-     setTimeout(this.followingQuestion, 3 * 1000);
-   }
- },
+  timeUp: function() {
 
- results: function() {
-   clearInterval(window.timer);
-
-   $("#counter-number").text(this.counter);
- 
-   card.html("<h2>Congratulations! You Completed the Trivia.");
-   card.append("<h3>Answered correctly: " + this.right + "</h3>");
-   card.append("<h3>Answered incorrectly: " + this.wrong + "</h3>");
-   card.append("<h3>Questions Unanswered: " + (this.questions - (this.right + this.wrong)) + "</h3>");
-   card.append("<br><button id='start-over'>Start Over?</button>");
- },
-
- clicked: function(e) {
-   clearInterval(window.timer);
-   if ($(e.target).attr("data-name") === questions[this.currentQuestion].correctAnswer) {
-     this.rightAnswer();
-   }
-   else {
-     this.wrongAnswer();
-   }
- },
-
- rightAnswer: function() {
     clearInterval(window.timer);
 
-    this.right++;
+    $("#counter-number").text(this.counter);
 
-    card.append("<h2>You're Correct! &#128522</h2>");
+    card.html("<h2>Out of Time!</h2>");
+    card.append("<h3>The Correct Answer was: " + questions[this.currentQuestion].correctAnswer);
+    card.append("<img src='" + questions[this.currentQuestion].image + "' />");
+
+    if (this.currentQuestion === questions.length - 1) {
+      setTimeout(this.results, 3 * 1000);
+    }
+    else {
+      setTimeout(this.nextQuestion, 3 * 1000);
+    }
+  },
+
+  results: function() {
+
+    clearInterval(window.timer);
+
+    card.html("<h2>All done, heres how you did!</h2>");
+
+    $("#counter-number").text(this.counter);
+
+    card.append("<h3>Correct Answers: " + this.correct + "</h3>");
+    card.append("<h3>Incorrect Answers: " + this.incorrect + "</h3>");
+    card.append("<h3>Unanswered: " + (questions.length - (this.incorrect + this.correct)) + "</h3>");
+    card.append("<br><button id='start-over'>Start Over?</button>");
+  },
+
+  clicked: function(e) {
+    clearInterval(window.timer);
+    if ($(e.target).attr("data-name") === questions[this.currentQuestion].correctAnswer) {
+      this.answeredCorrectly();
+    }
+    else {
+      this.answeredIncorrectly();
+    }
+  },
+
+  answeredIncorrectly: function() {
+
+    this.incorrect++;
+
+    clearInterval(window.timer);
+
+    card.html("<h2>Nope! &#128542</h2>");
+    card.append("<h3>The Correct Answer was: " + questions[this.currentQuestion].correctAnswer + "</h3>");
     card.append("<img src='" + questions[this.currentQuestion].image + "' />");
 
     if (this.currentQuestion === questions.length - 1) {
       setTimeout(this.results.bind(this), 3 * 1000);
     }
     else {
-      setTimeout(this.followingQuestion.bind(this), 3 * 1000);
+      setTimeout(this.nextQuestion.bind(this), 3 * 1000);
     }
- },
+  },
 
- wrongAnswer: function() {
-   clearInterval(window.timer);
+  answeredCorrectly: function() {
 
-   card.append("<h2>You Are Wrong! &#128542</h2>");
-   card.append("<h3>The Correct Answer is: " + questions[this.currentQuestion].correctAnswer + "</h3>");
-   card.append("<img src='" + questions[this.currentQuestion].image + "' />");
+    clearInterval(window.timer);
 
-   if (this.currentQuestion === questions.length - 1) {
-     setTimeout(this.results.bind(this), 3 * 1000);
-   }
-   else {
-     setTimeout(this.followingQuestion.bind(this), 3 * 1000);
-   }
- },
+    this.correct++;
 
- reset: function() {
+    card.html("<h2>Correct! &#128522</h2>");
+    card.append("<img src='" + questions[this.currentQuestion].image + "' />");
+
+    if (this.currentQuestion === questions.length - 1) {
+      setTimeout(this.results.bind(this), 3 * 1000);
+    }
+    else {
+      setTimeout(this.nextQuestion.bind(this), 3 * 1000);
+    }
+  },
+
+  reset: function() {
     this.currentQuestion = 0;
     this.counter = countStartNumber;
-    this.right = 0;
-    this.wrong = 0;
+    this.correct = 0;
+    this.incorrect = 0;
     this.loadQuestion();
- }
-
+  }
 };
+
+// CLICK EVENTS
 
 $(document).on("click", "#start-over", game.reset.bind(game));
 
@@ -199,3 +211,4 @@ $(document).on("click", "#start", function() {
   $("#sub-wrapper").prepend("<h2>Time Remaining: <span id='counter-number'>30</span> Seconds</h2>");
   game.loadQuestion.bind(game)();
 });
+

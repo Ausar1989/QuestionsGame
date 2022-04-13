@@ -6,14 +6,18 @@ body {
 body {
   text-align: center;
   background-image: url("../images/question.gif");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 #wrapper {
   width: 960px;
-  height: 95%;
+  height: 85%;
   box-sizing: border-box;
   margin: 2.5% auto;
-  background-color: #fff17a;
+  background-color: #b87aff;
 }
 
 #sub-wrapper {
@@ -28,8 +32,8 @@ button {
   margin: 0 auto;
   font-size: 42px;
   cursor: pointer;
-  background: transparent;
-  border: 0;
+  background-color: aqua ;
+  border: 2px white;
 }
 
 img {
@@ -56,11 +60,19 @@ h3 {
 
 #start {
   margin-top: 10%;
-  background: pink;
-  border: 2px solid blue;
+  background-color: blue;
+  border: 2px solid purple;
+}
+
+#start:hover {
+  margin-top: 10%;
+  background-color: rgb(0, 166, 255);
+  border: 2px solid rgb(85, 0, 128);
+  transition: 0.7s;
 }
 
 button:hover {
-  background: pink;
-  border: 2px solid blue;
+  background: green;
+  border: 2px solid purple;
+  transition: 0.7s;
 }

@@ -6,10 +6,10 @@ If the user answers the questions correctly, the user wins the game. If the user
 This is an image before the game begins:
 ![trivia1](assets/images/questionsGame1.png)
 
-This is an image after the game begins with 28 seconds remaining:
+This is an image after the game begins with 23 seconds remaining:
 ![trivia2](assets/images/questionsGame2.png)
 
-This is an image of the Done button being clicked:
+This is an image after the correct answer clicked:
 ![trivia3](assets/images/questionsGame3.png)
 
 # Technologies Used:
